@@ -1,4 +1,5 @@
-# src/03_lstm_model.py
+import os
+os.environ["PYTHONIOENCODING"] = "utf-8"
 import random, numpy as np
 from pathlib import Path
 import tensorflow as tf
@@ -17,8 +18,10 @@ tf.random.set_seed(SEED)
 # -------------------- Paths --------------------
 BASE_DIR = Path(__file__).resolve().parent
 DATA_ROOT = (BASE_DIR / "../data/aclImdb").resolve()
+OUT_DIR   = (BASE_DIR / "../outputs").resolve() 
 MODELS_DIR = (BASE_DIR / "../outputs/models").resolve()
-PRED_PATH = (BASE_DIR / "../outputs/preds_lstm.csv").resolve()
+PRED_PATH = OUT_DIR / "preds_lstm.csv"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 # -------------------- Dev toggle (subset while iterating) --------------------
@@ -85,8 +88,13 @@ print(classification_report(yte, pred, digits=4))
 print("Confusion Matrix:\n", confusion_matrix(yte, pred))
 
 # -------------------- Save artifacts --------------------
-model.save(MODELS_DIR / "lstm_imdb.keras")
-print(f"Saved: {MODELS_DIR / 'lstm_imdb.keras'}")
+# Variante A: SavedModel-Export (verzeichnisbasiert, robust gg. Encoding)
+SAVE_DIR = MODELS_DIR / "lstm_imdb_savedmodel"
+model.export(str(SAVE_DIR))
+print(f"Saved: {SAVE_DIR}")
 
-pd.DataFrame({"text": Xte, "y_true": yte, "y_pred": pred, "proba": proba}).to_csv(PRED_PATH, index=False)
+# Predictions immer UTF-8
+pd.DataFrame(
+    {"text": Xte, "y_true": yte, "y_pred": pred, "proba": proba}
+).to_csv(PRED_PATH, index=False, encoding="utf-8")
 print(f"Saved: {PRED_PATH}")
