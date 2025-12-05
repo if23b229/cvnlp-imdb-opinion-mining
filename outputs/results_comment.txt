@@ -1,0 +1,1 @@
+- **TF-IDF+NB** ist in diesem Lauf vorn. Das kann auf starke n-Gram-Signale und gutes Regularisieren hinweisen; gleichzeitig trainiert NB deutlich schneller und ist ressourcenschonend.

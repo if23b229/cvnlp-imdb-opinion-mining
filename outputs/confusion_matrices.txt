@@ -1,0 +1,7 @@
+TF-IDF + Naive Bayes – Confusion Matrix:
+[[11088  1412]
+ [ 1826 10674]]
+
+BiLSTM – Confusion Matrix:
+[[11114  1386]
+ [ 2663  9837]]
